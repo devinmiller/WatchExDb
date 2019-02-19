@@ -45,6 +45,6 @@ namespace Wex.Context.Models
         public string SelfText { get; set; }
 
 
-        public virtual Preview Preview { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
     }
 }

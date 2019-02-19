@@ -11,7 +11,6 @@ namespace Wex.Context
     public class WexContext : DbContext
     {
         public virtual DbSet<Post> Posts { get; set; }
-        public virtual DbSet<Preview> Previews { get; set; }
         public virtual DbSet<Image> Images { get; set; }
 
         public WexContext() { }
@@ -32,6 +31,20 @@ namespace Wex.Context
             }
 
             base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasMany(e => e.Images);
+            });
+
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
         }
     }
 }

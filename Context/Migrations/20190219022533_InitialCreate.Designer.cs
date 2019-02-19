@@ -10,7 +10,7 @@ using Wex.Context;
 namespace Wex.Context.Migrations
 {
     [DbContext(typeof(WexContext))]
-    [Migration("20190217184445_InitialCreate")]
+    [Migration("20190219022533_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,9 @@ namespace Wex.Context.Migrations
 
                     b.Property<int>("Height");
 
-                    b.Property<int?>("PreviewId");
+                    b.Property<int>("ImageType");
+
+                    b.Property<int?>("PostId");
 
                     b.Property<string>("Url");
 
@@ -37,7 +39,7 @@ namespace Wex.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreviewId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Images");
                 });
@@ -70,8 +72,6 @@ namespace Wex.Context.Migrations
 
                     b.Property<bool>("Pinned");
 
-                    b.Property<int?>("PreviewId");
-
                     b.Property<string>("RedditId");
 
                     b.Property<string>("SelfText");
@@ -84,47 +84,14 @@ namespace Wex.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PreviewId");
-
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("Wex.Context.Models.Preview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Enabled");
-
-                    b.Property<int?>("SourceId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("Previews");
                 });
 
             modelBuilder.Entity("Wex.Context.Models.Image", b =>
                 {
-                    b.HasOne("Wex.Context.Models.Preview")
-                        .WithMany("Resolutions")
-                        .HasForeignKey("PreviewId");
-                });
-
-            modelBuilder.Entity("Wex.Context.Models.Post", b =>
-                {
-                    b.HasOne("Wex.Context.Models.Preview", "Preview")
-                        .WithMany()
-                        .HasForeignKey("PreviewId");
-                });
-
-            modelBuilder.Entity("Wex.Context.Models.Preview", b =>
-                {
-                    b.HasOne("Wex.Context.Models.Image", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId");
+                    b.HasOne("Wex.Context.Models.Post")
+                        .WithMany("Images")
+                        .HasForeignKey("PostId");
                 });
 #pragma warning restore 612, 618
         }
